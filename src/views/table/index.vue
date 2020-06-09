@@ -28,7 +28,7 @@
         >岸桥</span>
         <span v-for="(item, index) in craneList" :key="index" class="crane_num">{{ item }}</span>
       </div>
-      <div class="finish_small_btn" style="margin-top: 5vh;margin-left: 20vw;">确定</div>
+      <div class="finish_small_btn" style="margin-top: 5vh;margin-left: 20vw;" @click="toWorkBay">确定</div>
     </div>
   </div>
 </template>
@@ -166,6 +166,11 @@ export default {
         this.list = response.data.items
         this.listLoading = false
       })
+    },
+    toWorkBay() {
+      const newUrl = this.$router.resolve({ name: '#/workBay' })
+      console.log(newUrl)
+      window.open(newUrl.location.name, '_blank')
     }
   }
 }
@@ -183,6 +188,7 @@ export default {
       max-width: 1844px;
       height: 358px;
       background: url('../../assets/bg/shipBg.png') no-repeat;
+      background-size: cover;
       display: flex;
       justify-content: center;
     }

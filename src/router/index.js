@@ -42,7 +42,6 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,
@@ -58,6 +57,12 @@ export const constantRoutes = [
       name: 'Example',
       component: () => import('@/views/table/index'),
       meta: { title: 'Example', icon: 'example' }
+    },
+    {
+      path: 'workBay',
+      name: 'WorkBay',
+      component: () => import('@/views/workBay/index'),
+      meta: { title: 'WorkBay', icon: 'example' }
     }]
   },
   // {

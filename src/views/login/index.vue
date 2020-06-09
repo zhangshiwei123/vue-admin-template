@@ -147,9 +147,9 @@ $cursor: #fff;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      color: #333333;
       height: 47px;
-      caret-color: $cursor;
+      caret-color: #333333;
 
       &:-webkit-autofill {
         box-shadow: 0 0 0px 1000px $bg inset !important;
@@ -164,6 +164,10 @@ $cursor: #fff;
     border-radius: 5px;
     color: #454545;
   }
+}
+.el-button--primary {
+  background: #0C2366 !important;
+  border-color: #0C2366 !important;
 }
 </style>
 
@@ -181,11 +185,14 @@ $light_gray:#eee;
 
   .login-form {
     position: relative;
-    width: 520px;
+    width: 480px;
+    height: 450px;
+    padding: 48px 58px;
     max-width: 100%;
-    padding: 160px 35px 0;
     margin: 25vh auto;
     overflow: hidden;
+    background: white;
+    border-radius: 8px;
   }
 
   .tips {
@@ -210,6 +217,7 @@ $light_gray:#eee;
 
   .title-container {
     position: relative;
+    margin-bottom: 50px;
 
     .title {
       font-size: 26px;
