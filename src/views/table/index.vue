@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h1>船名代码:{{ shipInfo.date }} 进口航次:{{ shipInfo.inPlane }} 出口航次:{{ shipInfo.outPlane }}</h1>
+    <h1>船名代码:{{ shipInfo.VisitId }} 进口航次:{{ shipInfo.VesselIn }} 出口航次:{{ shipInfo.VesselOut }}</h1>
     <div class="shipContainer" style="display: flex;">
       <div v-for="( item, index) in dataLsit" :key="index" class="ship_item">
         <div v-for="(it, ind) in item.top" :key="ind" :class="[it == '1' ? 'top_color' : 'top_no_color']" />
