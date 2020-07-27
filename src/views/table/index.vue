@@ -81,7 +81,6 @@ export default {
           type: 'warning'
         })
       }
-      //   this.isChange = index
     },
     chooseCrane(crane, index) {
       console.log(crane)
