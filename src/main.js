@@ -13,17 +13,16 @@ import store from './store'
 import router from './router'
 
 import '@/icons' // icon
-import '@/permission' // permission control
-import echarts from 'echarts'
+// import '@/permission' // permission control
 import api from './api'
+// import VueSocketIO from 'vue-socket.io'
 
 window.API = api
-Vue.prototype.$echarts = echarts
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
  * you can execute: mockXHR()
- *
+ *区·
  * Currently MockJs will be used in the production environment,
  * please remove it before going online ! ! !
  */
@@ -38,10 +37,23 @@ Vue.use(ElementUI, { locale })
 // Vue.use(ElementUI)
 
 Vue.config.productionTip = false
-
+// beforeRouteEnter (to, from, next) {
+// next()
+// Vue.use(new VueSocketIO({
+//   debug: true,
+//   connection: 'http://192.168.105.97:8888'
+// }))
+// }
 new Vue({
-  el: '#app',
   router,
   store,
   render: h => h(App)
-})
+  // sockets: {
+  //   reply({ value }) {
+  //     console.log(value)
+  //   },
+  //   connect: function() {
+  //     console.log('socket connected')
+  //   }
+  // }
+}).$mount('#app')

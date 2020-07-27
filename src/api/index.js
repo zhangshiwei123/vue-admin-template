@@ -1,7 +1,9 @@
 import wellBayList from './wellBayList'
+import wellPage from './wellPage'
 
 const API = {
-  wellBayList
+  wellBayList,
+  wellPage
 }
 
 export default API

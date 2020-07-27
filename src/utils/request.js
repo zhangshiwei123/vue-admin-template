@@ -10,7 +10,7 @@ import qs from 'qs'
 // 'http://192.168.105.218:8000' || 192.168.105.218
 console.log(window.location.origin + '/api')
 const service = axios.create({
-  baseURL: 'http://192.168.105.35', // url = base url + request url
+  baseURL: 'http://10.66.66.18:8888', // url = base url + request url
   // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   withCredentials: true, // send cookies when cross-domain requests
   timeout: 50000 // request timeout

@@ -4,8 +4,8 @@
     <div class="shipContainer" style="display: flex;">
       <div v-for="( item, index) in dataLsit" :key="index" class="ship_item">
         <div v-for="(it, ind) in item.top" :key="ind" :class="[it == '1' ? 'top_color' : 'top_no_color']" />
-        <span class="ship_num">{{ item.num }}</span>
-        <div v-for="(it, ind) in item.bottom" :key="ind" :class="[it == '1' ? 'top_color' : 'top_no_color']" />
+        <span class="ship_num">{{ item.Bay }}</span>
+        <div v-for="(its, inds) in item.bottom" :key="'info' + inds" :class="[its == '1' ? 'top_color' : 'top_no_color']" />
       </div>
     </div>
     <div class="ship_info_container">
@@ -17,7 +17,7 @@
                  color:rgba(51,51,51,1);
                  margin-right: 26px"
         >贝位</span>
-        <span v-for="(item, index) in dataLsit" :key="index" class="bay_num">{{ item.num }}</span>
+        <span v-for="(items, indexs) in dataLsit" :key="indexs" :class="[(chooseBayInfo.indexOf(items.Bay) != -1) ? 'bay_num isActive' : 'bay_num']" style="cursor: pointer;" @click="chooseBay(items, indexs)">{{ items.Bay }}</span>
       </div>
       <div class="crane_pos">
         <span
@@ -26,7 +26,7 @@
                  font-weight:600;
                  color:rgba(51,51,51,1);"
         >岸桥</span>
-        <span v-for="(item, index) in craneList" :key="index" class="crane_num">{{ item }}</span>
+        <span v-for="(item1, index) in craneList" :key="index" :class="[isChange == index ? 'crane_num isActive_crane' : 'crane_num']" style="cursor: pointer;" @click="chooseCrane(item1, index)">{{ item1 }}</span>
       </div>
       <div class="finish_small_btn" style="margin-top: 5vh;margin-left: 20vw;" @click="toWorkBay">确定</div>
     </div>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
+// import { getList } from '@/api/table'
 
 export default {
   data() {
@@ -42,134 +42,72 @@ export default {
       list: null,
       listLoading: true,
       shipInfo: JSON.parse(window.localStorage.getItem('shipInfo')),
-      dataLsit: [
-        {
-          num: '001',
-          top: ['1', '1', '1'],
-          bottom: ['1', '1', '1']
-        },
-        {
-          num: '003',
-          top: ['0', '1', '1'],
-          bottom: ['1', '1', '1']
-        },
-        {
-          num: '005',
-          top: ['1', '1', '1'],
-          bottom: ['1', '1', '1']
-        },
-        {
-          num: '007',
-          top: ['1', '1', '1'],
-          bottom: ['1', '1', '1']
-        },
-        {
-          num: '009',
-          top: ['1', '1', '1'],
-          bottom: ['1', '1', '1']
-        },
-        {
-          num: '011',
-          top: ['1', '1', '1'],
-          bottom: ['1', '1', '1']
-        },
-        {
-          num: '013',
-          top: ['0', '0', '0'],
-          bottom: ['1']
-        },
-        {
-          num: '015',
-          top: ['0', '1', '1'],
-          bottom: ['1', '1', '1']
-        },
-        {
-          num: '017',
-          top: ['1', '1', '1'],
-          bottom: ['1', '1', '1']
-        },
-        {
-          num: '019',
-          top: ['0', '1', '1'],
-          bottom: ['1', '1']
-        },
-        {
-          num: '021',
-          top: ['0', '1', '1'],
-          bottom: ['1', '1', '1']
-        },
-        {
-          num: '023',
-          top: ['1', '1', '1'],
-          bottom: ['1', '1']
-        },
-        {
-          num: '023',
-          top: ['1', '1', '1'],
-          bottom: ['1', '1']
-        },
-        {
-          num: '023',
-          top: ['1', '1', '1'],
-          bottom: ['1', '1']
-        },
-        {
-          num: '023',
-          top: ['1', '1', '1'],
-          bottom: ['1', '1']
-        },
-        {
-          num: '023',
-          top: ['1', '1', '1'],
-          bottom: ['1', '1']
-        },
-        {
-          num: '023',
-          top: ['1', '1', '1'],
-          bottom: ['1', '1']
-        },
-        {
-          num: '023',
-          top: ['1', '1', '1'],
-          bottom: ['1', '1']
-        },
-        {
-          num: '023',
-          top: ['1', '1', '1'],
-          bottom: ['1', '1']
-        },
-        {
-          num: '023',
-          top: ['1', '1', '1'],
-          bottom: ['1', '1']
-        },
-        {
-          num: '023',
-          top: ['1', '1', '1'],
-          bottom: ['1', '1']
-        },
-        {
-          num: '023',
-          top: ['1', '1', '1'],
-          bottom: ['1', '1']
-        }
-      ],
-      craneList: ['QC101', 'QC102', 'QC103', 'QC104', 'QC105', 'QC106', 'QC107', 'QC108', 'QC109']
+      // isFirstChooseBay: false,
+      dataLsit: [],
+      craneList: [],
+      isChange: -1,
+      chooseBayInfo: [],
+      chooseCraneInfo: ''
     }
   },
   created() {
+    this.getWellPage()
   },
   methods: {
-    fetchData() {
-      this.listLoading = true
-      getList().then(response => {
-        this.list = response.data.items
-        this.listLoading = false
+    async getWellPage() {
+      const res = await API.wellPage.getWellPage({
+        v_id: this.shipInfo.VisitId
       })
+      const littleBox = {
+        top: ['1', '1', '1'],
+        bottom: ['1', '1']
+      }
+      res.Bay.forEach((item, index) => {
+        const newobj = Object.assign(item, littleBox)
+        this.dataLsit.push(newobj)
+      })
+      this.craneList = res.CraneId
+    },
+    chooseBay(bayInfo, index) {
+      const findIndex = this.chooseBayInfo.indexOf(bayInfo.Bay)
+      if (findIndex > -1) {
+        this.chooseBayInfo.splice(findIndex, 1)
+      } else if (this.chooseBayInfo.length !== 2) {
+        this.chooseBayInfo.push(bayInfo.Bay)
+      }
+      if (bayInfo.Link === 'None' && this.chooseBayInfo.length > 1) {
+        this.$message({
+          message: '请选择相邻贝位!',
+          type: 'warning'
+        })
+        console.log(bayInfo.Link, this.chooseBayInfo[0])
+      }
+      console.log(this.chooseBayInfo)
+      // if (index !== this.isChange) {
+      //   this.isChange = index
+      // } else {
+      //   this.isChange = -1
+      // }
+    },
+    chooseCrane(crane, index) {
+      console.log(crane)
+      if (index !== this.isChange) {
+        this.isChange = index
+        this.chooseCraneInfo = crane
+      } else {
+        this.chooseCraneInfo = ''
+        this.isChange = -1
+      }
     },
     toWorkBay() {
       const newUrl = this.$router.resolve({ name: '#/workBay' })
-      console.log(newUrl)
+      // console.log(this.dataLsit)
+      const bayInfo = {
+        chooseBay: this.chooseBayInfo,
+        chooseCrane: this.chooseCraneInfo
+      }
+      window.localStorage.setItem('bayInfo', JSON.stringify(bayInfo))
+      window.localStorage.setItem('bayList', JSON.stringify(this.dataLsit))
       window.open(newUrl.location.name, '_blank')
     }
   }
@@ -230,21 +168,30 @@ export default {
       display: inline-block;
       width: 40px;
       height: 30px;
+      text-align: center;
+      line-height: 30px;
       font-size:20px;
       font-family:HelveticaNeue-CondensedBold,HelveticaNeue;
       font-weight:normal;
       color:rgba(12,35,102,1);
       margin-left: 20px;
     }
+    .isActive {
+      background: rgba(12,35,102,1);
+      color: white;
+    }
     .crane_num {
       display: inline-block;
-      width: 40px;
-      height: 30px;
       font-size:20px;
       font-family:HelveticaNeue-CondensedBold,HelveticaNeue;
       font-weight:normal;
       color:rgba(12,35,102,1);
       margin-left: 40px;
+    }
+    .isActive_crane {
+      background: rgba(12,35,102,1);
+      color: white !important;
+      padding: 1px 2px;
     }
     .crane_pos {
       margin-top: 40px;
