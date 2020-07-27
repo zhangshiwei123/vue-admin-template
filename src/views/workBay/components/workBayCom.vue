@@ -28,13 +28,16 @@
                 </div>
                 <span slot="reference" @click="tapBox(it)">{{ it.ContainerId }}</span>
               </el-popover>
-              <span v-else :class="[(it.Status === 0 && isMove) ? 'moveBox': '']" @click="tapBox(it, inx, ite.Y)">{{ it.ContainerId }}</span>
+              <span v-else :class="[(it.Status === 0 && isMove) ? 'moveBox': '']" @click="tapBox(it, inx, ite.Y, item.BayNum)">{{ it.ContainerId }}</span>
             </div>
             <span class="y_num">{{ ite.Y }}</span>
           </div>
+          <div class="xListBox">
+            <span v-for="(i, d) in xList" :key="d">{{ i }}</span>
+          </div>
         </div>
       </div>
-      <!-- 卸货港现实，与箱号显示分开 -->
+      <!-- 卸货港显示，与箱号显示分开 -->
       <div v-for="(item, index) in bayData" v-else :key="index" class="bayContainer">
         <div class="bay_tit_info">BAY {{ item.BayNum }}</div>
         <div v-for="(ite, ind) in item.Data" :key="ind" :class="[ite.DownBayStart ? 'bottomBay' : 'topBay']">
@@ -71,12 +74,13 @@ export default {
       refNamePopover: 'popover-',
       isMove: false,
       showUnport: false,
-      unloadPortArr: []
+      unloadPortArr: [],
+      xList: []
     }
   },
   created() {
     this.initUnloadPortArr()
-    // console.log(this.unloadPortArr)
+    this.xList = this.bayData[0].XList
   },
   methods: {
     initUnloadPortArr() {
@@ -99,6 +103,9 @@ export default {
       this.$emit('confirmLocation', info)
       this.isMove = !this.isMove
     },
+    triggerMove() {
+      this.isMove = true
+    },
     CancelLocation(info, index) {
       const refName = this.refNamePopover + info.ContainerId
       this.$refs[refName][0].doClose()
@@ -114,12 +121,16 @@ export default {
       this.$refs[refName][0].doClose()
       this.$emit('ModifyContainerId', info)
     },
-    tapBox(info, index, yPos) {
+    tapBox(info, index, yPos, bayNum) {
       if (this.isMove && info.Status === 0) {
         const xPos = this.bayData[0].XList[index]
+        const firstLocation = bayNum + xPos + yPos
+        this.$emit('confirmFirstLocation', firstLocation)
+        this.isMove = false
+        console.log(firstLocation)
         // const yPos = info.Y
-        console.log(info)
-        console.log('X---' + xPos, 'Y---' + yPos)
+        // console.log(info)
+        // console.log('X---' + xPos, 'Y---' + yPos)
       }
       if (info.Status === 3) {
         this.isMove = true
@@ -372,6 +383,23 @@ export default {
 .moveBox {
   &:hover {
     border:1px dashed rgba(33,162,255,1);
+  }
+}
+.xListBox {
+  width: 100%;
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin-top: 12px;
+  justify-content: center;
+  position: relative;
+  span {
+    display: inline-block;
+    width:36px;
+    height:37px;
+    text-align: center;
+    font-family:HelveticaNeue;
+    color: #333;
   }
 }
 </style>

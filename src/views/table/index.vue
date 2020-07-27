@@ -75,19 +75,13 @@ export default {
       } else if (this.chooseBayInfo.length !== 2) {
         this.chooseBayInfo.push(bayInfo.Bay)
       }
-      if (bayInfo.Link === 'None' && this.chooseBayInfo.length > 1) {
+      if (bayInfo.Link === 'None' && this.chooseBayInfo.length > 1) { // 如果不是相邻贝位，或单贝位，提示用户选择有误
         this.$message({
           message: '请选择相邻贝位!',
           type: 'warning'
         })
-        console.log(bayInfo.Link, this.chooseBayInfo[0])
       }
-      console.log(this.chooseBayInfo)
-      // if (index !== this.isChange) {
       //   this.isChange = index
-      // } else {
-      //   this.isChange = -1
-      // }
     },
     chooseCrane(crane, index) {
       console.log(crane)
@@ -106,8 +100,9 @@ export default {
         chooseBay: this.chooseBayInfo,
         chooseCrane: this.chooseCraneInfo
       }
-      window.localStorage.setItem('bayInfo', JSON.stringify(bayInfo))
-      window.localStorage.setItem('bayList', JSON.stringify(this.dataLsit))
+      // 跳转时把贝位列表，和用户选择的贝位 & 岸桥存入localstorage
+      window.localStorage.setItem('bayInfo', JSON.stringify(bayInfo)) // 用户选择的贝位和岸桥信息
+      window.localStorage.setItem('bayList', JSON.stringify(this.dataLsit)) // 全部贝位列表
       window.open(newUrl.location.name, '_blank')
     }
   }

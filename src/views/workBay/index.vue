@@ -35,7 +35,7 @@
             <div class="info_item">待确认</div>
           </div>
         </div>
-        <workBayCom v-if="bayData.length != 0" :bay-data="bayData" @confirmLocation="confirmLocation" @CancelLocation="CancelLocation" @ModifyLocation="ModifyLocation" @ModifyContainerId="ModifyContainerId" />
+        <workBayCom v-if="bayData.length != 0" ref="child" :bay-data="bayData" @confirmLocation="confirmLocation" @CancelLocation="CancelLocation" @ModifyLocation="ModifyLocation" @ModifyContainerId="ModifyContainerId" @confirmFirstLocation="confirmFirstLocation" />
       </el-col>
       <el-col :span="7" class="right_container" style="margin-left: 30px;">
         <div class="table_tittle_box">
@@ -362,13 +362,22 @@ export default {
     addListInfo() { // 识别列表添加数据
       this.dialogFormVisible5 = true
     },
-    confirmAddListInfo() {
+    confirmAddListInfo() { // 确认添加识别列表一条数据
       console.log(this.ArgsMsg)
       const sentData = {
         'Action': 'AddIdentificationList',
         'ArgsMsg': [this.ArgsMsg]
       }
       this.websocketsend('AddIdentificationList', sentData)
+    },
+    confirmFirstLocation(pos) { // 首箱标定，识别列表第一条数据的实际位置和计划位置都为空都时候触发
+      const sentData = {
+        'Action': 'ConfirmFirstLocation',
+        'ArgsMsg': {
+          'NewMsg': pos + ''
+        }
+      }
+      this.websocketsend('ConfirmFirstLocation', sentData)
     },
     websocketonopen() { // 连接建立之后执行send方法发送数据
       // const actions = { 'test': '12345' }
@@ -395,6 +404,15 @@ export default {
       this.bayData = redata.E // 贝位图数据
       this.bayInfo = redata.A // 贝位信息
       this.identificationList = redata.B // 识别列表
+      console.log(this.identificationList)
+      if (this.identificationList[0][0].ActualPos === '' && this.identificationList[0][0].PlanePos === '') {
+        this.$alert('请选择首个箱子的位置', '首箱标定', {
+          confirmButtonText: '知道了',
+          callback: action => {
+            this.$refs.child.triggerMove()
+          }
+        })
+      }
       if (redata.OK === 'error') {
         this.$notify.error({
           title: 'Failed',
@@ -447,6 +465,10 @@ export default {
         this.websock.send(JSON.stringify(data))
         console.log(JSON.stringify(data))
         this.dialogFormVisible5 = false
+      }
+      if (type === 'ConfirmFirstLocation') {
+        this.websock.send(JSON.stringify(data))
+        console.log(JSON.stringify(data))
       }
     },
     websocketclose(e) { // 关闭
@@ -535,12 +557,12 @@ export default {
     text-align: center;
     margin-left: 10px;
     cursor: pointer;
-    span {
-      position: relative;
-      left: -9.5px;
-      font-size: 13px;
-      top: -6px;
-    }
+    // span {
+    //   position: relative;
+    //   left: -9.5px;
+    //   font-size: 13px;
+    //   top: -6px;
+    // }
   }
   .el-button--primary:hover{
     background-color: rgba(12,35,102,1);
