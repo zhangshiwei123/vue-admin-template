@@ -214,11 +214,11 @@ export default {
       bayData: [],
       bayInfo: '',
       identificationList: [],
-      dialogFormVisible: false,
-      dialogFormVisible2: false,
-      dialogFormVisible3: false,
-      dialogFormVisible4: false,
-      dialogFormVisible5: false,
+      dialogFormVisible: false, // 修改箱位置弹窗
+      dialogFormVisible2: false, // 修改箱号弹窗
+      dialogFormVisible3: false, // 结束作业弹窗
+      dialogFormVisible4: false, // 切换贝位弹窗
+      dialogFormVisible5: false, // 识别列表添加信息弹窗
       modifyLocationInfo: '',
       refNamePopover: 'popover-',
       changePos: '', // 修改后箱位置Pos,
@@ -260,7 +260,7 @@ export default {
       this.websock.onerror = this.websocketonerror
       this.websock.onclose = this.websocketclose
     },
-    chooseBay(bayInfo, index) {
+    chooseBay(bayInfo, index) { // 切换贝位的时候选择贝位
       if (this.chooseInfo.chooseBay.indexOf(bayInfo.Bay) !== -1) {
         return
       }
@@ -380,9 +380,6 @@ export default {
       this.websocketsend('ConfirmFirstLocation', sentData)
     },
     websocketonopen() { // 连接建立之后执行send方法发送数据
-      // const actions = { 'test': '12345' }
-      // this.websocketsend(JSON.stringify(actions))
-      // console.log(actions)
       const sentInitData = {
         'Action': 'InitOperationPage',
         'ArgsMsg': {
@@ -405,6 +402,7 @@ export default {
       this.bayInfo = redata.A // 贝位信息
       this.identificationList = redata.B // 识别列表
       console.log(this.identificationList)
+      // 如果识别列表的第一条数据没有实际位置 && 没有计划位置，则触发首箱标定条件
       if (this.identificationList[0][0].ActualPos === '' && this.identificationList[0][0].PlanePos === '') {
         this.$alert('请选择首个箱子的位置', '首箱标定', {
           confirmButtonText: '知道了',
@@ -452,21 +450,21 @@ export default {
         this.websock.send(JSON.stringify(data))
         this.dialogFormVisible3 = false
       }
-      if (type === 'initData') {
+      if (type === 'initData') { // 初始化数据
         this.websock.send(JSON.stringify(data))
         console.log(JSON.stringify(data))
       }
-      if (type === 'ReInitOperationPage') {
+      if (type === 'ReInitOperationPage') { // 切换贝位重新获取数据
         this.websock.send(JSON.stringify(data))
         console.log(JSON.stringify(data))
         this.dialogFormVisible4 = false
       }
-      if (type === 'AddIdentificationList') {
+      if (type === 'AddIdentificationList') { // 识别列表添加一条信息
         this.websock.send(JSON.stringify(data))
         console.log(JSON.stringify(data))
         this.dialogFormVisible5 = false
       }
-      if (type === 'ConfirmFirstLocation') {
+      if (type === 'ConfirmFirstLocation') { // 首箱标定
         this.websock.send(JSON.stringify(data))
         console.log(JSON.stringify(data))
       }

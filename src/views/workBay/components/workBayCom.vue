@@ -83,30 +83,30 @@ export default {
     this.xList = this.bayData[0].XList
   },
   methods: {
-    initUnloadPortArr() {
+    initUnloadPortArr() { // 初始化卸货港信息，一样的卸货港只取出一个push到数组里
       const hashArr = []
       this.bayData.forEach((item, index) => {
         item.Data.forEach((ite, ind) => {
           ite.BoxList.forEach(it => {
-            if (it.UnloadPort !== '') {
+            if (it.UnloadPort !== '') { // 取出所有卸货港信息
               hashArr.push(it.UnloadPort)
             }
           })
         })
       })
-      this.unloadPortArr = this.sortArr(hashArr)
+      this.unloadPortArr = this.sortArr(hashArr) // 调用去重函数，对所有卸货港去重
       console.log(this.unloadPortArr)
     },
-    confirmLocation(info, index) {
+    confirmLocation(info, index) { // 确认位置
       const refName = this.refNamePopover + info.ContainerId
       this.$refs[refName][0].doClose()
       this.$emit('confirmLocation', info)
       this.isMove = !this.isMove
     },
-    triggerMove() {
+    triggerMove() { // 定义父组件触发方法
       this.isMove = true
     },
-    CancelLocation(info, index) {
+    CancelLocation(info, index) { // 取消位置
       const refName = this.refNamePopover + info.ContainerId
       this.$refs[refName][0].doClose()
       this.$emit('CancelLocation', info)
@@ -136,7 +136,7 @@ export default {
         this.isMove = true
       }
     },
-    sortArr(arr) {
+    sortArr(arr) { // 去重，一样的卸货港只取出一个push到数组里
       const hash = []
       for (var i = 0; i < arr.length; i++) {
         if (hash.indexOf(arr[i]) === -1) {
