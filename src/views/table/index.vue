@@ -120,10 +120,10 @@ export default {
   }
     .shipContainer {
       margin: 20vh auto;
-      max-width: 1844px;
+      // max-width: 1844px;
       height: 358px;
       background: url('../../assets/bg/shipBg.png') no-repeat;
-      background-size: cover;
+      background-size: contain;
       display: flex;
       justify-content: center;
     }
