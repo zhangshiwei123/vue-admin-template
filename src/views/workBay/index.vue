@@ -4,7 +4,7 @@
       <el-col :span="15" class="left_container">
         <div class="bay_info_text">
           <div class="bay_info_text_left">
-            <span>岸桥：<b>QC107</b></span><span>装/卸：<b>{{ bayInfo.vessel_action_type }}</b></span><span>停靠方向：<b>左停靠</b></span><span>集卡号：<b>{{ bayInfo.car_num }}</b></span><span>当前车道：<b>{{ bayInfo.lane_num }}</b></span>
+            <span>岸桥：<b>{{chooseInfo.chooseCrane}}</b></span><span>装/卸：<b>{{ bayInfo.vessel_action_type }}</b></span><span>停靠方向：<b>左停靠</b></span><span>集卡号：<b>{{ bayInfo.car_num }}</b></span><span>当前车道：<b>{{ bayInfo.lane_num }}</b></span>
           </div>
           <div class="bay_info_text_right">
             <span>过境箱显示</span>

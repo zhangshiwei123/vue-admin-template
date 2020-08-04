@@ -139,16 +139,16 @@
             <el-option label="Right" value="Right" />
           </el-select>
         </el-form-item>
-        <el-form-item>
+        <!-- <el-form-item>
           <template>
             <div slot="footer" class="dialog-footer">
               <div class="cancel_small_btn">取消</div>
               <div class="finish_small_btn" @click="commitAddInfo(ruleForm)">确定</div>
             </div>
           </template>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
-          <el-button>重置</el-button>
+          <el-button type="danger" @click="dialogFormVisible = !dialogFormVisible">取消</el-button>
           <el-button type="primary" @click="commitAddInfo('ruleForm')">立即创建</el-button>
         </el-form-item>
       </el-form>
@@ -236,9 +236,6 @@ export default {
         ],
         VesselOut: [
           { required: true, message: '请输入出口航次', trigger: 'blur' }
-        ],
-        VesselRoute: [
-          { required: true, message: '请输入航线', trigger: 'blur' }
         ],
         Park: [
           { required: true, message: '请输入泊位', trigger: 'blur' }
@@ -436,6 +433,22 @@ export default {
     span {
       position: relative;
       left: -9.5px;
+      font-size: 13px;
+      top: -6px;
+    }
+  }
+  .el-button--danger{
+    width: 71px;
+    height: 28px;
+    background:rgba(197,197,197,1);
+    border:1px solid rgba(197,197,197,1);
+    color: white;
+    border-radius: 2px;
+    text-align: center;
+    margin-left: 10px;
+    cursor: pointer;
+    span {
+      position: relative;
       font-size: 13px;
       top: -6px;
     }

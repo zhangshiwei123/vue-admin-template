@@ -26,9 +26,9 @@
                  font-weight:600;
                  color:rgba(51,51,51,1);"
         >岸桥</span>
-        <span v-for="(item1, index) in craneList" :key="index" :class="[isChange == index ? 'crane_num isActive_crane' : 'crane_num']" style="cursor: pointer;" @click="chooseCrane(item1, index)">{{ item1 }}</span>
+        <span v-for="(item1, index) in craneList" :key="index" :class="[isChange == index ? 'crane_num isActive_crane' : 'crane_num']" style="cursor: pointer;">{{ item1 }}</span>
       </div>
-      <div class="finish_small_btn" style="margin-top: 5vh;margin-left: 20vw;" @click="toWorkBay">确定</div>
+      <div :class="[chooseBayInfo.length == 0 || chooseCraneInfo == '' ? 'disable_small_btn' : 'finish_small_btn']" style="margin-top: 5vh;margin-left: 20vw;" @click="toWorkBay">确定</div>
     </div>
   </div>
 </template>
@@ -93,6 +93,9 @@ export default {
       }
     },
     toWorkBay() {
+      if (this.chooseBayInfo.length === 0 || this.chooseCraneInfo === '') {
+        return
+      }
       const newUrl = this.$router.resolve({ name: '#/workBay' })
       // console.log(this.dataLsit)
       const bayInfo = {
@@ -176,6 +179,7 @@ export default {
     }
     .crane_num {
       display: inline-block;
+
       font-size:20px;
       font-family:HelveticaNeue-CondensedBold,HelveticaNeue;
       font-weight:normal;
