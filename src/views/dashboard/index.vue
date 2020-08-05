@@ -33,7 +33,6 @@
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange"
-      @click="toShipPlane(scope)"
     >
       <el-table-column
         type="selection"
@@ -48,6 +47,7 @@
                   font-weight:normal;
                   cursor: pointer;
                   color:rgba(51,51,51,1);"
+                  @click="toShipPlane(scope)"
         >{{ scope.row.VisitId }}</span></template>
       </el-table-column>
       <el-table-column
